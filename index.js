@@ -1,5 +1,16 @@
-var mongoose = require("mongoose");
+const express = require("express");
+const dotenv = require("dotenv").config();
+const { errorHandler } = require("./middleware/errorMiddleware");
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
-const uri =
-  "mongodb+srv://firoos:firoos18@cluster0.aiwbnlx.mongodb.net/?retryWrites=true&w=majority";
+const port = process.env.PORT || 5000;
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use("/api/users", require("./routes/userRoutes"));
+
+app.use(errorHandler);
+
+app.listen(port, () => console.log(`server started at port ${port}`));
