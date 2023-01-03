@@ -1,0 +1,68 @@
+{
+  "komentar": [
+    {
+      "id": 1,
+      "idPengguna": "123",
+      "idArt": 1,
+      "komentar": " Wah Gambarnya sangat bagus sekali yaa",
+      "namaPengguna": "Teguh Dwi Cahya KusumaTeguh Dwi Cahya Kusuma"
+    },
+    {
+      "idPengguna": "123",
+      "idArt": 34,
+      "komentar": "Test Komentar",
+      "namaPengguna": "Teguh Dwi Cahya Kusuma",
+      "uploadAt": "22-10-2022",
+      "id": 2
+    },
+    {
+      "idPengguna": "123",
+      "idArt": 34,
+      "komentar": "Ini adalah Komentar Untuk Testing",
+      "namaPengguna": "Teguh Dwi Cahya Kusuma",
+      "uploadAt": "22-10-2022",
+      "id": 3
+    }
+  ],
+  "art": [
+    {
+      "id": 34,
+      "idPengguna": 124,
+      "urlGambar": 788,
+      "namaArt": "Push",
+      "deskripsi": "strategize virtual applications"
+    }
+  ],
+  "pengguna": [
+    {
+      "id": "ID-1671535889758",
+      "nama": "Fikri Iqram Azhar Fahroni",
+      "nickname": "pikri",
+      "avatar": "none",
+      "password": "fikri1",
+      "email": "fikri@gmail.com",
+      "gender": "Laki-laki",
+      "birth": "2002-12-31"
+    },
+    {
+      "id": "ID-1672642562537",
+      "nama": "Teguh Dwi Cahya Kusuma",
+      "nickname": "diama",
+      "avatar": "none",
+      "password": "teguh",
+      "email": "teguh.dc.kusuma@gmail.com",
+      "gender": "Laki-laki",
+      "birth": "2002-10-22",
+      "tanggal_regist": "2023-01-02",
+      "tanggal_update": "2023-01-02"
+    }
+  ],
+  "likes": [
+    {
+      "id": 12,
+      "idPengguna": 123,
+      "idGambar": 2,
+      "confirm": true
+    }
+  ]
+}

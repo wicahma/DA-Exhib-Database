@@ -9,7 +9,12 @@ const Comment = require("../Models/commentModels");
 // @access Private
 const getComments = asyncHandler(async (req, res) => {
   const art = await Art.findById(req.params.id);
-  const comment = await Comment.find({ artID: req.params.id });
+  const comment = await Comment.find({ artID: req.params.id })
+    .populate({
+      path: "userID",
+      select: "username",
+    })
+    .sort({ createdAt: -1 });
 
   // Check for arts
   if (!art) {
@@ -78,9 +83,8 @@ const updateComments = asyncHandler(async (req, res) => {
 // @route DELETE /api/users/:id
 // @access Private
 const deleteComments = asyncHandler(async (req, res) => {
-  const art = await Art.findById(req.params.id);
+  const art = await Art.findById(req.params.artId);
   const user = await User.findById(req.user.id);
-  const comment = await Comment.find({ artID: req.params.id, userID: user });
 
   if (!art) {
     res.status(400);
@@ -93,15 +97,13 @@ const deleteComments = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  // Make sure the creator matches the art
-  if (comment[0].userID.toString() !== user.id) {
-    res.status(401);
-    throw new Error("User not Authorized!");
-  }
+  await Comment.findOneAndDelete({
+    _id: req.params.commentId,
+    artID: req.params.artId,
+    userID: user,
+  });
 
-  await comment.remove();
-
-  res.status(200).json({ id: comment.id });
+  res.status(200).json("Succesfully Deleted Data");
 });
 
 module.exports = {

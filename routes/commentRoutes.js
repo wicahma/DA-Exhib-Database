@@ -11,9 +11,7 @@ const {
 const { protect } = require("../middleware/authMiddleware");
 
 router.route("/:id").get(protect, getComments).post(protect, addComments);
-router
-  .route("/:id")
-  .put(protect, updateComments)
-  .delete(protect, deleteComments);
+router.route("/:id").put(protect, updateComments);
+router.route("/:artId/:commentId").delete(protect, deleteComments);
 
 module.exports = router;

@@ -83,6 +83,20 @@ const getMe = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Displays User Data" });
 });
 
+// @desc Get User Data
+// @route GET /api/users/name
+// @access Private
+const getNameUser = asyncHandler(async (req, res) => {
+  const { _id, username } = await User.findById(req.params.id);
+
+  res.status(200).json({
+    id: _id,
+    username: username,
+  });
+
+  res.status(200).json({ message: "Displays User Data" });
+});
+
 // @desc Update User
 // @route PUT /api/users/:id
 // @access Private
@@ -106,6 +120,7 @@ const generateToken = (id) => {
 
 module.exports = {
   registerUser,
+  getNameUser,
   getMe,
   updateUser,
   deleteUser,

@@ -2,9 +2,10 @@ const asyncHandler = require("express-async-handler");
 
 const Art = require("../Models/artModels");
 const User = require("../Models/userModels");
+const { uploadToGoogleDrive, authenticateGoogle } = require("../services/googleDriveServices");
 
-// @desc Get Users
-// @route GET /api/users
+// @desc Get Arts
+// @route GET /api/arts
 // @access Public
 const getArts = asyncHandler(async (req, res) => {
   const art = await Art.find({ creatorID: req.user.id });
@@ -12,8 +13,24 @@ const getArts = asyncHandler(async (req, res) => {
   res.status(200).json(art);
 });
 
+// @desc Get Arts
+// @route GET /api/arts
+// @access Public
+const getAllArts = asyncHandler(async (req, res) => {
+  const art = await Art.find({});
+  res.status(200).json(art);
+});
+
+// @desc Get Arts
+// @route GET /api/arts/user/:id
+// @access Public
+const getArtByUser = asyncHandler(async (req, res) => {
+  const art = await Art.find({ creatorID: req.params.id });
+  res.status(200).json(art);
+});
+
 // @desc Add User
-// @route POST /api/users
+// @route POST /api/arts
 // @access Public
 const addArt = asyncHandler(async (req, res) => {
   if (!req.body.name) {
@@ -32,7 +49,7 @@ const addArt = asyncHandler(async (req, res) => {
 });
 
 // @desc Update User
-// @route PUT /api/users/:id
+// @route PUT /api/arts/:id
 // @access Private
 const updateArt = asyncHandler(async (req, res) => {
   const art = await Art.findById(req.params.id);
@@ -64,7 +81,7 @@ const updateArt = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete User
-// @route DELETE /api/users/:id
+// @route DELETE /api/arts/:id
 // @access Private
 const deleteArt = asyncHandler(async (req, res) => {
   const art = await Art.findById(req.params.id);
@@ -93,9 +110,35 @@ const deleteArt = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+const uploadToDatabase = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  // Check for user
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  try {
+    if (!req.file) {
+      res.status(400).send("No file uploaded.");
+      return;
+    }
+    const auth = authenticateGoogle();
+    const response = await uploadToGoogleDrive(req.file, auth);
+    deleteFile(req.file.path);
+    res.status(200).json({ response });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = {
   getArts,
   addArt,
   updateArt,
   deleteArt,
+  getAllArts,
+  getArtByUser,
+  uploadToDatabase,
 };
