@@ -17,8 +17,7 @@ app.use(
       "https://da-exhib.vercel.app",
       "https://da-exhib-diama.vercel.app",
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   })
 );
 app.use(express.urlencoded({ extended: false }));
