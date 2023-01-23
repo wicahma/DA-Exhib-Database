@@ -1,14 +1,35 @@
 const asyncHandler = require("express-async-handler");
-
+const fs = require("fs");
 const Art = require("../Models/artModels");
 const User = require("../Models/userModels");
-const { uploadToGoogleDrive, authenticateGoogle } = require("../services/googleDriveServices");
+const {
+  uploadToGoogleDrive,
+  authenticateGoogle,
+} = require("../services/googleDriveServices");
 
 // @desc Get Arts
 // @route GET /api/arts
 // @access Public
 const getArts = asyncHandler(async (req, res) => {
   const art = await Art.find({ creatorID: req.user.id });
+
+  res.status(200).json(art);
+});
+
+// @desc Search Arts
+// @route GET /api/arts/search
+// @access Public
+const searchArts = asyncHandler(async (req, res) => {
+  const art = await Art.find({
+    name: { $regex: req.params.name, $options: "i" },
+  });
+  const user = await User.findById(req.user.id);
+
+  // Check for user
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
 
   res.status(200).json(art);
 });
@@ -110,6 +131,12 @@ const deleteArt = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+const deleteFile = (filePath) => {
+  fs.unlink(filePath, () => {
+    console.log("file deleted");
+  });
+};
+
 const uploadToDatabase = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
 
@@ -127,9 +154,9 @@ const uploadToDatabase = asyncHandler(async (req, res) => {
     const auth = authenticateGoogle();
     const response = await uploadToGoogleDrive(req.file, auth);
     deleteFile(req.file.path);
-    res.status(200).json({ response });
+    res.status(200).json({ idArt: response.data.id });
   } catch (err) {
-    console.log(err);
+    res.status(400).json({ error: "Failed to Upload Art" });
   }
 });
 
@@ -141,4 +168,5 @@ module.exports = {
   getAllArts,
   getArtByUser,
   uploadToDatabase,
+  searchArts,
 };

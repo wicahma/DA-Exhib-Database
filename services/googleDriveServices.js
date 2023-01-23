@@ -31,7 +31,7 @@ async function generatePublicUrl(fileId, drive) {
 const uploadToGoogleDrive = async (file, auth) => {
   const fileMetadata = {
     name: file.originalname,
-    parents: ["1iRudvm-uEUVGaMUMJZLwTvsHqiR3SUyZ"], // Change it according to your desired parent folder id
+    parents: ["1iRudvm-uEUVGaMUMJZLwTvsHqiR3SUyZ"], 
   };
 
   const media = {
