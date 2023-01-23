@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://da-exhib.vercel.app/",
+    origin: "https://da-exhib.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
